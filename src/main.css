@@ -1,8 +1,13 @@
 .NavBar{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 10px;
 }
 
 .Container{
     height: 100%;
+}
+
+.NavBar-logo{
+    width: 170px;
 }

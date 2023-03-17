@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-import flask
+from flask import Flask, request
 import requests
-
+from flask_cors import CORS
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -19,11 +19,11 @@ CLIENT_SECRETS_FILE = "creden.json"
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
 API_SERVICE_NAME = 'sheet'
 API_VERSION = 'v2'
+SAMPLE_SPREADSHEET_ID = '16_zQ_XO0aWGfhpnMokNinto8eOizKvnqJ4V7rSWLE5o'
 
-app = flask.Flask(__name__)
-# Note: A secret key is included in the sample so that it works.
-# If you use this code in your application, replace this with a truly secret
-# key. See https://flask.palletsprojects.com/quickstart/#sessions.
+app = Flask(__name__)
+CORS(app)
+
 app.secret_key = '777deede7f7e'
 
 
@@ -33,26 +33,55 @@ def index():
 
 @app.route('/trainings', methods = ["POST"])
 def post_training():
-   data = requests.form
-   return data
+    data = request.json
+    SAMPLE_SPREADSHEET_ID = '16_zQ_XO0aWGfhpnMokNinto8eOizKvnqJ4V7rSWLE5o'
+    SAMPLE_RANGE_NAME = 'Feuille 1!A3:E50'
+    print(data)
+    creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    # pylint: disable=maybe-no-member
+    try:
+        service = build('sheets', 'v4', credentials=creds)
 
+        values = [
+            [
+                
+            ]
+        ]
+        values[0].append(getNewId())
+        values[0].append(data["Nom"])
+        values[0].append(data["Description"])
+        values[0].append(data["Type"])
+        body = {
+            'values': values
+        }
+        result = service.spreadsheets().values().append(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME,valueInputOption="RAW", body=body).execute()
+        print(f"{(result.get('updates').get('updatedCells'))} cells appended.")
+        return data
+    except HttpError as err:
+        print(err)
 
 @app.route('/trainings', methods = ["GET"])
-def test_api_request():
-  # The ID and range of a sample spreadsheet.
-  SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+def getTrainings():
+    SAMPLE_RANGE_NAME = 'Feuille 1!A2:E50'
+    SAMPLE_RANGE_COLLUMN = 'Feuille 1!A1:E'
+    return getRowValue(SAMPLE_RANGE_NAME, SAMPLE_RANGE_COLLUMN)
 
-  # The ID and range of a sample spreadsheet.
-  SAMPLE_SPREADSHEET_ID = '16_zQ_XO0aWGfhpnMokNinto8eOizKvnqJ4V7rSWLE5o'
-  SAMPLE_RANGE_NAME = 'Feuille 1!A2:E50'
-  SAMPLE_RANGE_COLLUMN = 'Feuille 1!A1:E'
+@app.route('/maxId', methods = ["GET"])
+def getNewId():
+    SAMPLE_RANGE_NAME = 'Feuille 1!A1:A300'
+    SAMPLE_RANGE_COLLUMN = 'Feuille 1!A1'
+    res = getRowValue(SAMPLE_RANGE_NAME, SAMPLE_RANGE_COLLUMN)
+    max = 0
+    for val in res:
+        if val["ID"].isdigit() and int(val["ID"])>max :  
+            max = int(val["ID"])
+    return str(max+1)
+
+
+def getRowValue(rangeRow, rangeCollumn):
   creds = None
-  # The file token.json stores the user's access and refresh tokens, and is
-  # created automatically when the authorization flow completes for the first
-  # time.
   if os.path.exists('token.json'):
       creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-  # If there are no (valid) credentials available, let the user log in.
   if not creds or not creds.valid:
       if creds and creds.expired and creds.refresh_token:
           creds.refresh(Request())
@@ -65,27 +94,23 @@ def test_api_request():
           token.write(creds.to_json())
   try:
       service = build('sheets', 'v4', credentials=creds)
-
-      # Call the Sheets API
       sheet = service.spreadsheets()
-      result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_NAME).execute()
-      columnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_COLLUMN).execute().get('values', [])[0]
+      result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=rangeRow).execute()
+      columnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=rangeCollumn).execute().get('values', [])[0]
       values = result.get('values', [])
       result = []
       if not values:
           print('No data found.')
           return
-
-      print('Name, Major:')
       for row in values:
           dict = {}
+          print(row)
           for (index, elem) in enumerate(row):
             dict[columnName[index]] = elem
           result.append(dict)
       return result
   except HttpError as err:
       print(err)
-
 
 
 if __name__ == '__main__':

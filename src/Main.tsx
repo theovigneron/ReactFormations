@@ -1,8 +1,9 @@
 import React, { useState } from "react"
-import { Tab, Tabs } from "@mui/material"
-import HomePage from "./HomePage/HomePage";
-import CreateTraining from "./CreateTraining/CreateTraining";
+import { Button, Tab, Tabs } from "@mui/material"
+import HomePage from "./Components/HomePage/HomePage";
+import CreateTraining from "./Components/CreateTraining/CreateTraining";
 import "./main.css"
+import logo from "./assets/logo.png"
 const Main = () => {
     const [value, setValue] = useState(1);
     // Liste des composants
@@ -16,6 +17,7 @@ const Main = () => {
 
     return <>
             <div className="NavBar">
+                    <img src={logo} alt="" className="NavBar-logo"/>
                     <Tabs
                         value={value}
                         onChange={handleChange}
@@ -26,6 +28,7 @@ const Main = () => {
                         <Tab value={1} label="HomePage" />
                         <Tab value={2} label="Creation" />
                     </Tabs>
+                    <Button variant="contained"> Se Connecter</Button>
             </div>
             <div className="Container">
                 <Component />
