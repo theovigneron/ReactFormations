@@ -41,7 +41,6 @@ const CreateTraining = () => {
     const { createTraining } = useTrainings()
     const submited = (dataForm: any) => {
         createTraining(dataForm)
-        console.log(dataForm)
     }
 
     return (

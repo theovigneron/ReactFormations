@@ -1,0 +1,12 @@
+.ExerciceModals{
+    background: white;
+    width: 70%;
+    height: 90%;
+    border-radius: 20px;
+}
+
+.ExerciceModals_header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}

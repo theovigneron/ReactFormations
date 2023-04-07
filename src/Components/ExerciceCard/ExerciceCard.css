@@ -1,0 +1,7 @@
+.exercice_card{
+    margin: 10px;
+    font-size: 10px;
+    border:  1px solid lightgray;
+    border-radius: 10px;
+    padding: 10px;
+}

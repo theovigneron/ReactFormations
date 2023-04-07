@@ -4,6 +4,8 @@ import HomePage from "./Components/HomePage/HomePage";
 import CreateTraining from "./Components/CreateTraining/CreateTraining";
 import "./main.css"
 import logo from "./assets/logo.png"
+import { GoogleLogin } from 'react-google-login';
+
 const Main = () => {
     const [value, setValue] = useState(1);
     // Liste des composants
@@ -11,6 +13,16 @@ const Main = () => {
 
     const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
         setValue(newValue);
+    };
+
+    const clientId = '790241858145-eoqa2f9jgu1bs68t4tfiaikvso28q2ot.apps.googleusercontent.com';
+
+    const onSuccess = (response: any) => {
+    console.log('Login Success:', response.profileObj);
+    };
+
+    const onFailure = (response: any) => {
+    console.log('Login Failed:', response);
     };
 
     const Component = componentsList[value]
@@ -28,7 +40,13 @@ const Main = () => {
                         <Tab value={1} label="HomePage" />
                         <Tab value={2} label="Creation" />
                     </Tabs>
-                    <Button variant="contained"> Se Connecter</Button>
+                    <GoogleLogin
+                        clientId={clientId}
+                        buttonText="Se connecter avec Google"
+                        onSuccess={onSuccess}
+                        onFailure={onFailure}
+                        cookiePolicy={'single_host_origin'}
+                    />
             </div>
             <div className="Container">
                 <Component />

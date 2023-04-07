@@ -4,3 +4,14 @@
     background: aliceblue;
     border-radius: 20px;
 }
+
+.trainingModals_header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.trainingModals_container{
+    display: flex;
+    flex-direction: column;
+}

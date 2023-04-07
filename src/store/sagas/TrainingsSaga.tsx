@@ -8,7 +8,6 @@ import { createSuccessTrainings, createTrainings, fetchTrainings, TrainingsFailu
 export function* fetchTrainingsAsync(){
   try {
     const resultTrainings: Training[] = yield call(getTrainingsRequest);
-    console.log(resultTrainings)
     yield put(TrainingsSuccess(resultTrainings))
   }catch (error) {
     yield put(TrainingsFailure());

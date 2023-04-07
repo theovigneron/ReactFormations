@@ -13,6 +13,11 @@ const HomePage = () => {
         setSelectedTrainings(training)
         setStatusModals(true)
     }
+
+    const closeModals = () => {
+        setStatusModals(false)
+    }
+
     return <div className="TrainingsCards">    
         {
             trainings.map((training) => (
@@ -26,7 +31,7 @@ const HomePage = () => {
             aria-describedby="parent-modal-description"
             >
             <Box sx={{ width: 400 }} className="modalBox">
-                <TrainingModals />
+                <TrainingModals onClose={closeModals} training={selectedTraining} />
             </Box>
         </Modal>
     </div>

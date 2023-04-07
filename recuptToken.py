@@ -26,7 +26,7 @@ def get_tokens(client_id, client_secret, redirect_uri, authorization_code):
 client_id = "790241858145-eoqa2f9jgu1bs68t4tfiaikvso28q2ot.apps.googleusercontent.com"
 client_secret = "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"
 redirect_uri = "http://localhost:8080"
-authorization_code = "4/0AVHEtk6EL5mgf1oFrBtt3JlSHRvD9S_ssz65sDDH_qF7BcbqqVmxLaSxS2M4RZfSBwuklA"
+authorization_code = "4/0AVHEtk6eNTa7Ezw2q1Xa6STxZp4D1ZISSOreu-Dp7BF0NMHu34jSp6LL9WOWdmxYg_NFRg"
 
 access_token, refresh_token = get_tokens(client_id, client_secret, redirect_uri, authorization_code)
 

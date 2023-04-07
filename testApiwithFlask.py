@@ -9,10 +9,8 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from google.oauth2 import service_account
 
-# This variable specifies the name of a file that contains the OAuth 2.0
-# information for this application, including its client_id and client_secret.
-CLIENT_SECRETS_FILE = "creden.json"
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account and requires requests to use an SSL connection.
@@ -37,8 +35,10 @@ def post_training():
     SAMPLE_SPREADSHEET_ID = '16_zQ_XO0aWGfhpnMokNinto8eOizKvnqJ4V7rSWLE5o'
     SAMPLE_RANGE_NAME = 'Feuille 1!A3:E50'
     print(data)
-    creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # pylint: disable=maybe-no-member
+    creds = service_account.Credentials.from_service_account_file(
+        'client_secret.json',
+        scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
+    )
     try:
         service = build('sheets', 'v4', credentials=creds)
 
@@ -79,42 +79,48 @@ def getNewId():
 
 
 def getRowValue(rangeRow, rangeCollumn):
-    print("coucou")
-    creds = None
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    print(creds.valid)
-    print(creds.expired)
-    print(creds.refresh_token)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            print("if")
-            creds.refresh(Request())
-        else:
-            print("else")
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'creden.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
+    creds = service_account.Credentials.from_service_account_file(
+        'client_secret.json',
+        scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
+    )
     try:
         service = build('sheets', 'v4', credentials=creds)
-        print(service)
         sheet = service.spreadsheets()
-        result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=rangeRow).execute()
+        sheetValues = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=rangeRow).execute()
         columnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=rangeCollumn).execute().get('values', [])[0]
-        values = result.get('values', [])
+        values = sheetValues.get('values', [])
         result = []
         if not values:
             print('No data found.')
             return
         for row in values:
             dict = {}
-            print(row)
             for (index, elem) in enumerate(row):
                 dict[columnName[index]] = elem
             result.append(dict)
+        for rowresult in result:
+            SAMPLE_RANGE_NAME = 'Programme'+rowresult['ID']+'!A2:E50'
+            SAMPLE_RANGE_COLLUMN = 'Programme'+rowresult['ID']+'!A1:E'
+            sheetValues = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_NAME).execute()
+            modulesColumnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_COLLUMN).execute().get('values', [])[0]
+            modulesValues = sheetValues.get('values', [])
+            rowresult['module'] = []
+            module = {}
+            for row in modulesValues:
+                for (index, elem) in enumerate(row):
+                    module[modulesColumnName[index]] = elem
+                SAMPLE_RANGE_NAME = 'P'+rowresult['ID']+'M'+module['ID']+'!A2:E50'
+                SAMPLE_RANGE_COLLUMN = 'P'+rowresult['ID']+'M'+module['ID']+'!A1:E'
+                exercicesValues = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_NAME).execute().get('values', [])
+                exercicesColumnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_COLLUMN).execute().get('values', [])[0]  
+                for rowExercice in exercicesValues:
+                    module['exercices'] = []
+                    exercice = {}
+                    for (indexExercice, elemExercice) in enumerate(rowExercice):
+                        exercice[exercicesColumnName[indexExercice]] = elemExercice
+                    print(exercice)
+                    module['exercices'].append(exercice)
+                rowresult['module'].append(module)
         return result
     except HttpError as err:
         print(err)
