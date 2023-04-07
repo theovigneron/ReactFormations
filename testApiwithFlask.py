@@ -79,38 +79,45 @@ def getNewId():
 
 
 def getRowValue(rangeRow, rangeCollumn):
-  creds = None
-  if os.path.exists('token.json'):
-      creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-  if not creds or not creds.valid:
-      if creds and creds.expired and creds.refresh_token:
-          creds.refresh(Request())
-      else:
-          flow = InstalledAppFlow.from_client_secrets_file(
-              'creden.json', SCOPES)
-          creds = flow.run_local_server(port=0)
-      # Save the credentials for the next run
-      with open('token.json', 'w') as token:
-          token.write(creds.to_json())
-  try:
-      service = build('sheets', 'v4', credentials=creds)
-      sheet = service.spreadsheets()
-      result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=rangeRow).execute()
-      columnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=rangeCollumn).execute().get('values', [])[0]
-      values = result.get('values', [])
-      result = []
-      if not values:
-          print('No data found.')
-          return
-      for row in values:
-          dict = {}
-          print(row)
-          for (index, elem) in enumerate(row):
-            dict[columnName[index]] = elem
-          result.append(dict)
-      return result
-  except HttpError as err:
-      print(err)
+    print("coucou")
+    creds = None
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    print(creds.valid)
+    print(creds.expired)
+    print(creds.refresh_token)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            print("if")
+            creds.refresh(Request())
+        else:
+            print("else")
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'creden.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
+    try:
+        service = build('sheets', 'v4', credentials=creds)
+        print(service)
+        sheet = service.spreadsheets()
+        result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=rangeRow).execute()
+        columnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=rangeCollumn).execute().get('values', [])[0]
+        values = result.get('values', [])
+        result = []
+        if not values:
+            print('No data found.')
+            return
+        for row in values:
+            dict = {}
+            print(row)
+            for (index, elem) in enumerate(row):
+                dict[columnName[index]] = elem
+            result.append(dict)
+        return result
+    except HttpError as err:
+        print(err)
 
 
 if __name__ == '__main__':
