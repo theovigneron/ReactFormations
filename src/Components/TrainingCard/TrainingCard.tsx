@@ -1,11 +1,12 @@
 import { FC } from "react"
-import { Training } from "../Models/TrainingModel"
+import { Training } from "../../Models/TrainingModel"
 import "./TrainingCard.css"
 export interface TrainingProps{
     training: Training
+    onOpen: () => void
 }
-const TrainingCard: FC<TrainingProps> = ({training}) => {
-    return <div className="trainingCard">
+const TrainingCard: FC<TrainingProps> = ({training, onOpen}) => {
+    return <div className="trainingCard" onClick={onOpen}>
         <img className="picture" />
         <div className="infoCard">
             <div className="infoCard_header">

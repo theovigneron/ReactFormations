@@ -30,12 +30,12 @@ const TrainingReducers = createSlice({
     TrainingsFailure(state){
       state.loadingStatus = LOADING_STATUS.LOADED;
     },
-    createTrainings(state, action: any){
+    createTrainings(state){
       state.loadingStatus = LOADING_STATUS.PENDING;
     },
     createSuccessTrainings(state, action: PayloadAction<Training>){
-      state.trainings.push(action.payload)
-      state.trainings = {...state.trainings}
+      state.loadingStatus = LOADING_STATUS.LOADED;
+      state.trainings = [...state.trainings, action.payload]
     }
   }
 })

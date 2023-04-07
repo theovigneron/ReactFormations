@@ -1,8 +1,11 @@
 import React from "react"
-import { makeStyles, Button, Box, TextField } from "@mui/material"
+import { makeStyles, Button, Box, TextField, Select, MenuItem } from "@mui/material"
 import { useForm } from 'react-hook-form';
 import "./CreateTraining.css"
+import useTrainings from "../../hook/useTrainings";
 export type FieldType = "text" | "select"
+export const TypeTraining = ["cuisine","sport","science","nature","photo"]
+
 
 const useStyles = () => makeStyles({ 
     validateButton: { 
@@ -35,8 +38,9 @@ const useStyles = () => makeStyles({
 
 const CreateTraining = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
-
+    const { createTraining } = useTrainings()
     const submited = (dataForm: any) => {
+        createTraining(dataForm)
         console.log(dataForm)
     }
 
@@ -58,13 +62,19 @@ const CreateTraining = () => {
                     label={"Description"}
                     variant="outlined" 
                 />
-                <TextField 
-                    {...register("Type", {required: `Champ vide veuillez le remplir `})}
-                    style={{ width: "100%" }} 
-                    name={"Type"} 
-                    label={"Type"}
+                <Select 
+                    {...register("Type")} 
+                    style={{width:"100%"}}
                     variant="outlined" 
-                />
+                    defaultValue={TypeTraining[0]}
+                >
+                    <MenuItem value={-1} disabled>Selectionner une type de cours</MenuItem>
+                    {
+                        TypeTraining.map(item =>(
+                            <MenuItem value={item}>{item}</MenuItem>
+                        ))
+                    }
+                </Select>
                 <Box  style={ { justifyContent: "center", borderTop: "solid", borderTopColor: "gray", margin: "10px", display:"flex", paddingTop:'1em' } }>
                     <Button onClick={ handleSubmit(submited) }>Valider</Button>  
                 </Box>
