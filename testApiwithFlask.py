@@ -37,7 +37,7 @@ def post_training():
     print(data)
     creds = service_account.Credentials.from_service_account_file(
         'client_secret.json',
-        scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
+        scopes=['https://www.googleapis.com/auth/spreadsheets']
     )
     try:
         service = build('sheets', 'v4', credentials=creds)
@@ -111,14 +111,15 @@ def getRowValue(rangeRow, rangeCollumn):
                     module[modulesColumnName[index]] = elem
                 SAMPLE_RANGE_NAME = 'P'+rowresult['ID']+'M'+module['ID']+'!A2:E50'
                 SAMPLE_RANGE_COLLUMN = 'P'+rowresult['ID']+'M'+module['ID']+'!A1:E'
+              
                 exercicesValues = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_NAME).execute().get('values', [])
                 exercicesColumnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_COLLUMN).execute().get('values', [])[0]  
+                module['exercices'] = []
+
                 for rowExercice in exercicesValues:
-                    module['exercices'] = []
                     exercice = {}
                     for (indexExercice, elemExercice) in enumerate(rowExercice):
                         exercice[exercicesColumnName[indexExercice]] = elemExercice
-                    print(exercice)
                     module['exercices'].append(exercice)
                 rowresult['module'].append(module)
         return result
