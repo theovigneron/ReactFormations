@@ -15,7 +15,7 @@ form{
     padding: 10px;
     display: flex;
     flex-direction: column;
-    /* justify-content: space-around; */
+    background: #F8FBF1;
     justify-content: space-between;
     align-items: center;
 }

@@ -64,7 +64,19 @@ def post_training():
 def getTrainings():
     SAMPLE_RANGE_NAME = 'Feuille 1!A2:E50'
     SAMPLE_RANGE_COLLUMN = 'Feuille 1!A1:E'
+    trainings = getRowValue(SAMPLE_RANGE_NAME, SAMPLE_RANGE_COLLUMN)    
+    for training in trainings:
+        SAMPLE_RANGE_NAME = 'Programme{training[]}!A2:E50'
+        SAMPLE_RANGE_COLLUMN = 'Programme 1!A1:E'
+        modules = getRowValue(SAMPLE_RANGE_NAME, SAMPLE_RANGE_COLLUMN)  
+    return 
+
+@app.route('/pricings', methods = ["GET"])
+def getPricings():
+    SAMPLE_RANGE_NAME = 'Offres!A2:E50'
+    SAMPLE_RANGE_COLLUMN = 'Offres!A1:E'
     return getRowValue(SAMPLE_RANGE_NAME, SAMPLE_RANGE_COLLUMN)
+
 
 @app.route('/maxId', methods = ["GET"])
 def getNewId():
@@ -98,30 +110,6 @@ def getRowValue(rangeRow, rangeCollumn):
             for (index, elem) in enumerate(row):
                 dict[columnName[index]] = elem
             result.append(dict)
-        for rowresult in result:
-            SAMPLE_RANGE_NAME = 'Programme'+rowresult['ID']+'!A2:E50'
-            SAMPLE_RANGE_COLLUMN = 'Programme'+rowresult['ID']+'!A1:E'
-            sheetValues = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_NAME).execute()
-            modulesColumnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_COLLUMN).execute().get('values', [])[0]
-            modulesValues = sheetValues.get('values', [])
-            rowresult['module'] = []
-            module = {}
-            for row in modulesValues:
-                for (index, elem) in enumerate(row):
-                    module[modulesColumnName[index]] = elem
-                SAMPLE_RANGE_NAME = 'P'+rowresult['ID']+'M'+module['ID']+'!A2:E50'
-                SAMPLE_RANGE_COLLUMN = 'P'+rowresult['ID']+'M'+module['ID']+'!A1:E'
-              
-                exercicesValues = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_NAME).execute().get('values', [])
-                exercicesColumnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_COLLUMN).execute().get('values', [])[0]  
-                module['exercices'] = []
-
-                for rowExercice in exercicesValues:
-                    exercice = {}
-                    for (indexExercice, elemExercice) in enumerate(rowExercice):
-                        exercice[exercicesColumnName[indexExercice]] = elemExercice
-                    module['exercices'].append(exercice)
-                rowresult['module'].append(module)
         return result
     except HttpError as err:
         print(err)
@@ -136,3 +124,29 @@ if __name__ == '__main__':
   # Specify a hostname and port that are set as a valid redirect URI
   # for your API project in the Google API Console.
   app.run('localhost', 8080, debug=True)
+
+
+# for rowresult in result:
+#         SAMPLE_RANGE_NAME = 'Programme'+rowresult['ID']+'!A2:E50'
+#         SAMPLE_RANGE_COLLUMN = 'Programme'+rowresult['ID']+'!A1:E'
+#         sheetValues = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_NAME).execute()
+#         modulesColumnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_COLLUMN).execute().get('values', [])[0]
+#         modulesValues = sheetValues.get('values', [])
+#         rowresult['module'] = []
+#         module = {}
+#         for row in modulesValues:
+#             for (index, elem) in enumerate(row):
+#                 module[modulesColumnName[index]] = elem
+#             SAMPLE_RANGE_NAME = 'P'+rowresult['ID']+'M'+module['ID']+'!A2:E50'
+#             SAMPLE_RANGE_COLLUMN = 'P'+rowresult['ID']+'M'+module['ID']+'!A1:E'
+            
+#             exercicesValues = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_NAME).execute().get('values', [])
+#             exercicesColumnName = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,range=SAMPLE_RANGE_COLLUMN).execute().get('values', [])[0]  
+#             module['exercices'] = []
+
+#             for rowExercice in exercicesValues:
+#                 exercice = {}
+#                 for (indexExercice, elemExercice) in enumerate(rowExercice):
+#                     exercice[exercicesColumnName[indexExercice]] = elemExercice
+#                 module['exercices'].append(exercice)
+#             rowresult['module'].append(module)

@@ -1,0 +1,29 @@
+.pricingCard{
+    background: white;
+    margin: 1em;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.pricingCard>*{
+    margin-bottom: 1em;
+    margin-top: 2em;
+}
+
+.pricingCard_header{
+    text-align: center;
+}
+
+.offerElement{
+    display: flex;
+    align-items: center;
+
+    
+}
+
+.offerElement>svg{
+    margin-right: 10px;
+}

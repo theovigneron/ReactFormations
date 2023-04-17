@@ -1,0 +1,31 @@
+.testingPage{
+    display: flex;
+    height: 100%; 
+    flex-direction: column;
+    place-content: center;
+}
+
+.testingPage_header{
+    padding-left: 3em;
+    display: flex;
+    align-items: center;
+    flex: 1 1;
+    flex-direction: column;
+}
+
+.testingPage_bottom{
+    padding-left: 3em;
+    display: flex;
+    align-items: center;
+    flex: 1 1;
+}
+
+.pricingscards{
+    display: flex;
+    flex: 5 1;
+    justify-content: center;
+    width: fit-content;
+    margin: auto;
+    background: #fbfafb9e;
+    border-radius: 20px;
+}

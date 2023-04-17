@@ -2,12 +2,20 @@
     display: flex;
     justify-content: space-between;
     padding: 10px;
+    flex: 1 1;
+    background-color: #C5C5A9;
+    align-items: center;
 }
 
 .Container{
     height: 100%;
+    flex: 20 1;
 }
 
 .NavBar-logo{
     width: 170px;
+}
+
+.tabsMui{
+    
 }

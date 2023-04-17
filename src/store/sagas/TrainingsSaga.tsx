@@ -1,7 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { call, put,takeEvery } from 'redux-saga/effects';
 import { Training } from '../../Models/TrainingModel';
-import Result, { TypedResult } from '../api/Result';
 import { getTrainingsRequest, postTrainingsRequest } from '../api/TrainingsApi';
 import { createSuccessTrainings, createTrainings, fetchTrainings, TrainingsFailure, TrainingsSuccess } from '../reducers/TrainingReducers';
 

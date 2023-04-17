@@ -5,10 +5,13 @@ import TrainingReducers from './reducers/TrainingReducers';
 import createSagaMiddleware from 'redux-saga'
 import { all } from 'redux-saga/effects';
 import TrainingsWatcher from './sagas/TrainingsSaga';
+import PricingsWatcher from './sagas/PricingsSaga';
+import PricingReducers from './reducers/PricingReducers';
 
 // diagnostic reducer - > all reducers
 const rootReducer = combineReducers({
-    trainings: TrainingReducers
+    trainings: TrainingReducers,
+    pricings: PricingReducers
 });
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -25,7 +28,8 @@ const enhancer = composeEnhancers(
 
 function* rootSagas() {
     yield all([
-        ...TrainingsWatcher
+        ...TrainingsWatcher,
+        ...PricingsWatcher
     ])
 }
 

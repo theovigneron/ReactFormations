@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Tab, Tabs } from "@mui/material"
+import { Button, Tab, Tabs, ThemeProvider, createTheme } from "@mui/material"
 import HomePage from "./Components/HomePage/HomePage";
 import CreateTraining from "./Components/CreateTraining/CreateTraining";
 import "./main.css"
@@ -7,11 +7,28 @@ import logo from "./assets/logo.png"
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import { GoogleLogin } from '@react-oauth/google';
+import Pricings from "./Components/Pricings/Pricings";
+
+const theme = createTheme({
+    components: {
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            color: '#37463D',
+            fontWeight: 'bold',
+            "&.Mui-selected": {
+              color: "#F8FBF1",
+              borderBottom: "none"
+            }         
+          },
+        },
+      },
+    },
+  });
 
 const Main = () => {
     const [value, setValue] = useState(1);
-    // Liste des composants
-    const componentsList: any = { 1: HomePage, 2: CreateTraining }
+    const componentsList: any = { 1: HomePage, 2: CreateTraining, 3:Pricings }
     const [cred, setCred] = useState<null | string | undefined>(null)
     const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
         setValue(newValue);
@@ -24,16 +41,19 @@ const Main = () => {
     return <>
             <div className="NavBar">
                     <img src={logo} alt="" className="NavBar-logo"/>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        textColor="primary"
-                        TabIndicatorProps={{ style: { margin: "0 auto" } }}
-                        indicatorColor="primary"
-                    >
-                        <Tab value={1} label="HomePage" />
-                        <Tab value={2} label="Creation" />
-                    </Tabs>
+                    <ThemeProvider theme={theme}>
+                        <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            className="tabsMui"
+                            TabIndicatorProps={{ sx: { margin: "0 auto", bgcolor:"#F8FBF1" } }}
+                        >
+                            <Tab value={1} label="HomePage" />
+                            <Tab value={2} label="Creation" />
+                            <Tab value={3} label="Nos prix" />
+                        </Tabs>
+                    </ThemeProvider>
+
                     {
                         cred == null
                         ?
