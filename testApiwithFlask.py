@@ -24,11 +24,6 @@ CORS(app)
 
 app.secret_key = '777deede7f7e'
 
-
-@app.route('/')
-def index():
-  return print_index_table()
-
 @app.route('/trainings', methods = ["GET"])
 def getTrainings():
     SAMPLE_RANGE_NAME = 'Liste!A2:F50'
@@ -92,7 +87,9 @@ def getMyTrainings():
     email = request.args.get('email')
     with open('database.json') as mon_fichier:
         database = json.load(mon_fichier)
-    return database[email]
+    if email in database:
+        return database[email]
+    return []
 
 @app.route('/mytrainings', methods = ["POST"])
 def addTrainings():
