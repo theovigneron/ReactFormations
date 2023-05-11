@@ -3,10 +3,32 @@
     width: 70%;
     height: 90%;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .ExerciceModals_header{
     display: flex;
     justify-content: space-between;
     padding: 10px;
+}
+
+.ExerciceModals_video_container{
+    flex: 5 1;
+}
+
+.ExerciceModals_container{
+    flex: 1 1;
+    background-color: #42564a;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: scroll;
+}
+
+.ExerciceModals_content{
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 0px 0px 0px 15px;
 }

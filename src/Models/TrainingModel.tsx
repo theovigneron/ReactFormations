@@ -1,23 +1,35 @@
 export interface Training{
-    Description: string,
-    ID: number,
+    Titre: string,
     Nom: string,
-    Type: string
-    module: Module[]
+    Logo: string
+    SheetId: string
+    modules: Module[]
+    contact: Contact
 }
 
+export interface Contact{
+    Description:string
+    Message:string
+    Nom:string
+    Photo:string
+    Site:string
+    Mail: string
+}
 
 export interface Module{
     Description : string,
-    ID: number
+    Code: number
     Libellé: string
+    Image: string
+    Type: string
     exercices: Exercice[]
 }
 
 export interface Exercice{
     Description: String
     Duree: number 
-    ID: number,
+    Code: number,
     Titre: string,
     Type: string
+    Lien: string
 }

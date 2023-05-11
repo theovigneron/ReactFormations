@@ -6,8 +6,6 @@ import PricingCard from "../PricingCard/PricingCard";
 import "./Pricings.css"
 const Pricings = () => {
     const { pricings, loadingStatus } = usePricings()
-    console.log(loadingStatus)
-    console.log(pricings)
     return <div className="testingPage">  
         {
         loadingStatus == LOADING_STATUS.LOADED

@@ -1,17 +1,60 @@
 .trainingModals{
     width: 70%;
     height: 90%;
-    background: aliceblue;
+    background: #F8FBF1;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
 }
 
 .trainingModals_header{
     display: flex;
     justify-content: space-between;
     padding: 10px;
+    flex: 1 1;
+}
+
+.trainingModals_header>img{
+    height: 90px;
 }
 
 .trainingModals_container{
     display: flex;
-    flex-direction: column;
+    flex: 9 9;
+    height: inherit;
+}
+.trainingModals_modules{
+    flex: 1 1;
+    display: flex;
+    overflow: scroll;
+}
+
+.trainingModals_contact{
+    flex: 1 1; 
+    background-color: #42564a;
+    height: 100%;
+    overflow: scroll;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.contact_header{
+    height: 10%;
+    display: flex;
+    margin: 10px 20px;
+}
+
+.contact_header>img{
+    height: 100%;
+    margin-right: 20px;
+}
+
+.contact_content{
+    margin: 10px 20px;
+}
+
+.infoConnection{    
+    text-align-last: center;
+    color: #a85353;
 }

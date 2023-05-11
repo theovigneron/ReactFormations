@@ -17,6 +17,7 @@
     margin: 10px;
     background-color: azure;
     border-radius: 10px;
+    object-fit: contain;
 }
 
 .infoCard{

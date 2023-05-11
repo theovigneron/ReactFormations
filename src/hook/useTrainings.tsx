@@ -17,6 +17,7 @@ const useTrainings = () => {
 
     return {
         trainings,
+        loadingStatus,
         createTraining
     }
 }
